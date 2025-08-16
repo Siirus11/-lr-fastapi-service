@@ -32,8 +32,8 @@ RUN pip install --no-cache-dir --upgrade pip \
 # Copy application code
 COPY main.py .
 
-# Copy model file if it exists
-COPY model.joblib . 2>/dev/null || echo "Model file not found, will be mounted later"
+# Copy model file
+COPY model.joblib .
 
 # Change ownership to non-root user
 RUN chown -R appuser:appuser /app
