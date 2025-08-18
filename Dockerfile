@@ -5,7 +5,8 @@ FROM python:3.11-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PYTHONPATH=/app \
-    MODEL_PATH=model.joblib \
+    MODEL_PATH=model.pkl \
+    INFO_PATH=preprocessing_info.pkl \
     PORT=8080
 
 # Set work directory
@@ -31,9 +32,11 @@ RUN pip install --no-cache-dir --upgrade pip \
 
 # Copy application code
 COPY main.py .
+COPY create_model.py .
+COPY LoanExport.csv .
 
-# Copy model file
-COPY model.joblib .
+# Generate model using real data
+RUN python create_model.py
 
 # Change ownership to non-root user
 RUN chown -R appuser:appuser /app
@@ -46,7 +49,7 @@ EXPOSE 8080
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
-    CMD curl -f http://localhost:8080/ping || exit 1
+    CMD curl -f http://localhost:8080/health || exit 1
 
 # Run the application
 CMD exec uvicorn main:app --host 0.0.0.0 --port $PORT
