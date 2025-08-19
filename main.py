@@ -182,7 +182,7 @@ async def root():
         }
     }
 
-@app.get("/health")
+@app.get("/")
 async def health_check():
     """Health check endpoint"""
     return {
