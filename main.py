@@ -167,7 +167,7 @@ def preprocess_mortgage_data(data: MortgageInput) -> np.ndarray:
 
 
 # API Endpoints
-@app.get("/health")
+@app.get("/")
 async def root():
     """Root endpoint"""
     return {
@@ -182,7 +182,7 @@ async def root():
         }
     }
 
-@app.get("/")
+@app.get("/health")
 async def health_check():
     """Health check endpoint"""
     return {
@@ -190,6 +190,11 @@ async def health_check():
         "model_loaded": model is not None,
         "preprocessing_loaded": preprocessing_info is not None
     }
+
+@app.get("/ping")
+async def ping():
+    """Simple ping endpoint for healthchecks"""
+    return {"status": "ok"}
 
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(data: MortgageInput):
