@@ -167,7 +167,7 @@ def preprocess_mortgage_data(data: MortgageInput) -> np.ndarray:
 
 
 # API Endpoints
-@app.get("/")
+@app.get("/health")
 async def root():
     """Root endpoint"""
     return {
